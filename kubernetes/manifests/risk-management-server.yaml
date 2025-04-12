@@ -20,8 +20,8 @@ spec:
               value: policy-management-backend-queue
             - name: ACTIVEMQ_PORT
               value: "61613"
-          image: gcr.io/lakeside-mutual-2020/risk-management-server
-          imagePullPolicy: Always
+          image: lakesidemutual/risk-management-server
+          imagePullPolicy: IfNotPresent
           name: risk-management-server
           ports:
             - containerPort: 50051
@@ -38,5 +38,4 @@ spec:
     - name: "50051"
       port: 50051
       targetPort: 50051
-  type: LoadBalancer
-  loadBalancerIP: 34.65.192.94
+  type: ClusterIP

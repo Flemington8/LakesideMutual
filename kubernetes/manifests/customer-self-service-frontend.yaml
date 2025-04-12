@@ -15,18 +15,25 @@ spec:
         app: customer-self-service-frontend
     spec:
       containers:
-        - env:
-            - name: REACT_APP_CUSTOMER_MANAGEMENT_BACKEND
-              value: http://34.65.192.94:8100
-            - name: REACT_APP_CUSTOMER_SELF_SERVICE_BACKEND
-              value: http://34.65.192.94:8080
-            - name: REACT_APP_POLICY_MANAGEMENT_BACKEND
-              value: http://34.65.192.94:8090
-          image: gcr.io/lakeside-mutual-2020/customer-self-service-frontend
-          imagePullPolicy: Always
-          name: customer-self-service-frontend
+        - name: customer-self-service-frontend
+          image: lakesidemutual/customer-self-service-frontend
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
+          env:
+            - name: REACT_APP_CUSTOMER_MANAGEMENT_BACKEND
+              value: http://customer-management-backend:8100
+            - name: REACT_APP_CUSTOMER_SELF_SERVICE_BACKEND
+              value: http://customer-self-service-backend:8080
+            - name: REACT_APP_POLICY_MANAGEMENT_BACKEND
+              value: http://policy-management-backend:8090
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -40,5 +47,4 @@ spec:
     - name: "3000"
       port: 3000
       targetPort: 80
-  type: LoadBalancer
-  loadBalancerIP: 34.65.192.94
+  type: ClusterIP

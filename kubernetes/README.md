@@ -1,18 +1,56 @@
 # ![Lakeside Mutual Logo](./resources/logo-32x32.png) Kubernetes
 
-## Google Cloud Kubernetes Engine
+## Kind
 
-This is an experimental deployment that has been tested on the Google Cloud Kubernetes Engine. The following steps assume that you have created a GKE Cluster and have all the command line tools set up.
+This is an experimental deployment tested on Kind. The following steps assume that you have created a Kind cluster and have all required CLI tools set up.
 
 ### Building
 
-1. Build the images by running `docker-compose build` (this can take 15-20 minutes on the first run).
-1. Push all local images to the Google Container Registry `docker images | grep gcr.io | cut -f1 -d' ' | xargs -L 1 docker push`
-1. Create a public IP address `gcloud compute addresses create my-public-ip` and replace all occurrences of `34.65.192.94` in the manifests with your own IP.
-1. Create the deployments and services: `kubectl apply -f manifests`
+1. **Build the images:**
 
-## Tipps & Tricks
+   ```bash
+   docker-compose build
+   ```
 
-Updating a deployment after updating the image:
+   _(First run can take about 15-20 minutes.)_
 
-```kubectl rollout restart deployment $THE_DEPLOYMENT```
+1. **Create a Kind cluster:**
+
+   ```bash
+   kind create cluster --name lakeside-mutual
+   ```
+
+1. **Load all local images to the Kind cluster:**
+
+   ```zsh
+   for image in $(docker images --format '{{.Repository}}:{{.Tag}}' | grep '^lakesidemutual/'); do
+     kind load docker-image "$image" --name lakeside-mutual
+   done
+   ```
+
+   > **Note**: You can get a list of images on a cluster node by running `docker exec -it my-node-name crictl images`, where `my-node-name` is the Docker container name (for example, `lakeside-mutual-control-plane`).
+
+1. **Create deployments and services:**
+
+   ```bash
+   kubectl apply -f manifests
+   ```
+
+### Accessing the Frontend Locally
+
+To view the frontend in your local environment, you can use port forwarding:
+
+```bash
+kubectl port-forward service/customer-management-frontend 3020:3020
+```
+
+Then, you can access the frontend at `http://localhost:3020`.
+```
+
+### Updating a Deployment
+
+If you update an image, you can restart the deployment with:
+
+```bash
+kubectl rollout restart deployment <deployment-name>
+```

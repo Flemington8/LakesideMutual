@@ -18,8 +18,8 @@ spec:
         - env:
             - name: SPRING_BOOT_ADMIN_CLIENT_URL
               value: http://spring-boot-admin:9000
-          image: gcr.io/lakeside-mutual-2020/customer-core
-          imagePullPolicy: Always
+          image: lakesidemutual/customer-core
+          imagePullPolicy: IfNotPresent
           name: customer-core
           ports:
             - containerPort: 8110

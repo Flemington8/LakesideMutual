@@ -22,8 +22,8 @@ spec:
               value: tcp://policy-management-backend:61616
             - name: SPRING_BOOT_ADMIN_CLIENT_URL
               value: http://spring-boot-admin:9000
-          image: gcr.io/lakeside-mutual-2020/customer-self-service-backend
-          imagePullPolicy: Always
+          image: lakesidemutual/customer-self-service-backend
+          imagePullPolicy: IfNotPresent
           name: customer-self-service-backend
           ports:
             - containerPort: 8080
@@ -40,5 +40,4 @@ spec:
     - name: "8080"
       port: 8080
       targetPort: 8080
-  type: LoadBalancer
-  loadBalancerIP: 34.65.192.94
+  type: ClusterIP

@@ -15,14 +15,21 @@ spec:
         app: policy-management-frontend
     spec:
       containers:
-        - env:
-            - name: VUE_APP_POLICY_MANAGEMENT_BACKEND
-              value: http://34.65.192.94:8090
-          image: gcr.io/lakeside-mutual-2020/policy-management-frontend
-          imagePullPolicy: Always
-          name: policy-management-frontend
+        - name: policy-management-frontend
+          image: lakesidemutual/policy-management-frontend
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
+          env:
+            - name: VUE_APP_POLICY_MANAGEMENT_BACKEND
+              value: http://policy-management-backend:8090
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -30,11 +37,10 @@ kind: Service
 metadata:
   name: policy-management-frontend
 spec:
+  type: ClusterIP
   selector:
     app: policy-management-frontend
   ports:
     - name: "3010"
       port: 3010
       targetPort: 80
-  type: LoadBalancer
-  loadBalancerIP: 34.65.192.94
