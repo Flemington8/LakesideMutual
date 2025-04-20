@@ -27,6 +27,13 @@ spec:
             - containerPort: 8090
             - containerPort: 61613
             - containerPort: 61616
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "200m"
+              memory: "512Mi"
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -48,6 +55,7 @@ kind: Service
 metadata:
   name: policy-management-backend-queue
 spec:
+  type: ClusterIP
   selector:
     app: policy-management-backend
   ports:
@@ -57,4 +65,3 @@ spec:
     - name: "61616"
       port: 61616
       targetPort: 61616
-  type: ClusterIP

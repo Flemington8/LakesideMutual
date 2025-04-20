@@ -41,10 +41,14 @@ This is an experimental deployment tested on Kind. The following steps assume th
 To view the frontend in your local environment, you can use port forwarding:
 
 ```bash
-kubectl port-forward service/customer-management-frontend 3020:3020
-```
+kubectl port-forward service/customer-self-service-frontend 3000:3000 &
+# You can access the customer-self-service-frontend at `http://localhost:3000`.
 
-Then, you can access the frontend at `http://localhost:3020`.
+kubectl port-forward service/policy-management-frontend 3010:3010 &
+# You can access the policy-management-frontend at `http://localhost:3010`.
+
+kubectl port-forward service/customer-management-frontend 3020:3020 &
+# You can access the customer-management-frontend at `http://localhost:3020`.
 ```
 
 ### Updating a Deployment

@@ -1,0 +1,146 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: lakeside-mutual-gateway
+spec:
+  selector:
+    istio: ingressgateway # Use the default Istio ingress gateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*" # Allow access from all hosts
+---
+# Customer Management Frontend
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: customer-management-frontend
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - lakeside-mutual-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /customer-management
+      rewrite:
+        uri: /
+      route:
+        - destination:
+            host: customer-management-frontend
+            port:
+              number: 3020
+---
+# Customer Self-Service Frontend
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: customer-self-service-frontend
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - lakeside-mutual-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /customer-self-service
+      rewrite:
+        uri: /
+      route:
+        - destination:
+            host: customer-self-service-frontend
+            port:
+              number: 3000
+---
+# Policy Management Frontend
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: policy-management-frontend
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - lakeside-mutual-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /policy-management
+      rewrite:
+        uri: /
+      route:
+        - destination:
+            host: policy-management-frontend
+            port:
+              number: 3010
+---
+# Customer Management Backend
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: customer-management-backend
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - lakeside-mutual-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /api/customer-management
+      rewrite:
+        uri: /
+      route:
+        - destination:
+            host: customer-management-backend
+            port:
+              number: 8100
+---
+# Customer Self-Service Backend
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: customer-self-service-backend
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - lakeside-mutual-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /api/customer-self-service
+      rewrite:
+        uri: /
+      route:
+        - destination:
+            host: customer-self-service-backend
+            port:
+              number: 8080
+---
+# Policy Management Backend
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: policy-management-backend
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - lakeside-mutual-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /api/policy-management
+      rewrite:
+        uri: /
+      route:
+        - destination:
+            host: policy-management-backend
+            port:
+              number: 8090

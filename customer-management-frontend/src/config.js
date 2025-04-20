@@ -1,9 +1,7 @@
 import env from "@beam-australia/react-env"
 
-export const customerSelfServiceBackend =
-  env("CUSTOMER_SELF_SERVICE_BACKEND") || ""
+export const customerSelfServiceBackend = env("REACT_APP_CUSTOMER_SELF_SERVICE_BACKEND") || ""
 
-export const customerManagementBackend =
-  env("CUSTOMER_MANAGEMENT_BACKEND") || ""
+export const customerManagementBackend = env("REACT_APP_CUSTOMER_MANAGEMENT_BACKEND") || ""
 
-export const policyManagementFrontend = env("POLICY_MANAGEMENT_FRONTEND") || ""
+export const policyManagementFrontend = env("REACT_APP_POLICY_MANAGEMENT_FRONTEND") || ""
